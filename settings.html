@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sound Circle - Settings</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #fff;
+      display: flex;
+    }
+    /* Sidebar */
+   .sidebar {
+  width: 250px;
+  background-color: #1e1e1e;
+  border-right: 1px solid #2a2a2a;
+  height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* pushes Back button to bottom */
+}
+
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #1db954;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar ul li {
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+      color: #fff;
+    }
+    .sidebar ul li:hover {
+      background-color: #2a2a2a;
+    }
+	
+    /* Content */
+    .content {
+      flex: 1;
+      padding: 30px;
+    }
+    .content h2 {
+      margin-bottom: 20px;
+      color: #1db954;
+    }
+    .card {
+      background-color: #1e1e1e;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"] {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      background-color: #2a2a2a;
+      color: #fff;
+    }
+    input[type="submit"], .back-btn {
+      background-color: #1db954;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+    }
+    input[type="submit"]:hover, .back-btn:hover {
+      background-color: #17a74a;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+ <div class="sidebar">
+  <h2>Settings</h2>
+  <ul>
+    <li onclick="showSection('account')">Account Info</li>
+    <li onclick="showSection('privacy')">Privacy</li>
+    <li onclick="showSection('security')">Security</li>
+  </ul>
+  <!-- Back Button anchored at bottom -->
+  <a href="home.html" class="back-btn">⬅ Back to Homepage</a>
+</div>
+
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Account Info -->
+    <div id="account" class="card">
+      <h2>Account Information</h2>
+      <form id="accountForm">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" placeholder="Enter your name">
+
+        <label for="nickname">Nickname</label>
+        <input type="text" id="nickname" placeholder="Enter your nickname">
+
+        <label for="age">Age</label>
+        <input type="number" id="age" placeholder="Enter your age">
+
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="Enter your email">
+
+        <label for="contact">Contact Number</label>
+        <input type="tel" id="contact" placeholder="Enter your contact number">
+
+        <input type="submit" value="Save Changes">
+      </form>
+    </div>
+
+    <!-- Privacy Settings -->
+    <div id="privacy" class="card" style="display:none;">
+      <h2>Privacy Settings</h2>
+      <form id="privacyForm">
+        <label><input type="checkbox" id="showPlaylists"> Allow friends to see my playlists</label>
+        <label><input type="checkbox" id="showProfile"> Allow public to see my profile</label>
+        <input type="submit" value="Save Privacy Settings">
+      </form>
+    </div>
+
+    <!-- Security -->
+    <div id="security" class="card" style="display:none;">
+      <h2>Security Settings</h2>
+      <form id="securityForm">
+        <label for="password">Change Password</label>
+        <input type="password" id="password" placeholder="New password">
+        <input type="submit" value="Update Password">
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function showSection(sectionId) {
+      const sections = document.querySelectorAll(".card");
+      sections.forEach(sec => sec.style.display = "none");
+      document.getElementById(sectionId).style.display = "block";
+    }
+
+    // Save account info to localStorage
+    document.getElementById("accountForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      localStorage.setItem("name", document.getElementById("name").value);
+      localStorage.setItem("nickname", document.getElementById("nickname").value);
+      localStorage.setItem("age", document.getElementById("age").value);
+      localStorage.setItem("email", document.getElementById("email").value);
+      localStorage.setItem("contact", document.getElementById("contact").value);
+      alert("✅ Account info saved!");
+	  
+	  const currentUser =
+  localStorage.getItem("savedUsername");
+
+const profileKey =
+  "profile_" + currentUser;
+
+const profile =
+  JSON.parse(localStorage.getItem(profileKey));
+
+// Save nickname
+profile.nickname =
+  document.getElementById("nicknameInput").value;
+
+localStorage.setItem(
+  profileKey,
+  JSON.stringify(profile)
+);
+    });
+
+    document.getElementById("privacyForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      localStorage.setItem("showPlaylists", document.getElementById("showPlaylists").checked);
+      localStorage.setItem("showProfile", document.getElementById("showProfile").checked);
+      alert("✅ Privacy settings saved!");
+    });
+
+    document.getElementById("securityForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      localStorage.setItem("password", document.getElementById("password").value);
+      alert("✅ Password updated!");
+    });
+	
+  </script>
+</body>
+</html>

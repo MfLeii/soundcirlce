@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sound Circle - CoPlaylist</title>
+
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #121212;
+      color: white;
+      font-family: Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
+    }
+
+    .sidebar {
+      width: 220px;
+      height: 100vh;
+      background: #000;
+      position: fixed;
+      left: 0;
+      top: 0;
+      padding: 20px;
+      z-index: 10;
+    }
+
+    .logo {
+      color: #1DB954;
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 40px;
+    }
+
+    .menu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #b3b3b3;
+      text-decoration: none;
+      margin: 10px 0;
+      padding: 12px 15px;
+      font-size: 17px;
+      border-radius: 10px;
+
+      transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        transform 0.2s ease;
+    }
+
+    .menu a:hover {
+      background: #1f1f1f;
+      color: white;
+      transform: translateX(5px);
+    }
+
+    .menu a.active {
+      background: #1DB954;
+      color: black;
+      font-weight: bold;
+    }
+
+    .main {
+      margin-left: 220px;
+      padding: 35px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero {
+      background: linear-gradient(to right, #1DB954, #0e5e2d);
+      border-radius: 25px;
+      padding: 40px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero h1 {
+      font-size: 55px;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      max-width: 700px;
+      line-height: 1.6;
+    }
+
+    .playlist-section {
+      margin-top: 45px;
+    }
+
+    .playlist-section h2 {
+      margin-bottom: 25px;
+      font-size: 30px;
+    }
+
+    .playlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 25px;
+    }
+
+    .playlist-card {
+      background: #181818;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+
+      transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .playlist-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      background: #202020;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.45);
+    }
+
+    .playlist-cover {
+      height: 180px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .playlist-cover::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.2);
+    }
+
+    .playlist-card:nth-child(1) .playlist-cover {
+      background: linear-gradient(135deg,#3f0d12,#a71d31);
+    }
+
+    .playlist-card:nth-child(2) .playlist-cover {
+      background: linear-gradient(135deg,#000428,#004e92);
+    }
+
+    .playlist-card:nth-child(3) .playlist-cover {
+      background: linear-gradient(135deg,#232526,#414345);
+    }
+
+    .playlist-card:nth-child(4) .playlist-cover {
+      background: linear-gradient(135deg,#134E5E,#71B280);
+    }
+
+    .playlist-card:nth-child(5) .playlist-cover {
+      background: linear-gradient(135deg,#42275a,#734b6d);
+    }
+
+    .playlist-card:nth-child(6) .playlist-cover {
+      background: linear-gradient(135deg,#141E30,#243B55);
+    }
+
+    .playlist-info {
+      padding: 18px;
+    }
+
+    .playlist-info h3 {
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+
+    .playlist-info p {
+      color: #b3b3b3;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .playlist-meta {
+      margin-top: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #1DB954;
+    }
+
+    .shared-box {
+      margin-top: 50px;
+      background: #181818;
+      border-radius: 20px;
+      padding: 25px;
+    }
+
+    .shared-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .shared-song {
+      padding: 15px;
+      background: #202020;
+      border-radius: 15px;
+      margin-bottom: 12px;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      transition:
+        transform 0.2s ease,
+        background 0.25s ease;
+    }
+
+    .shared-song:hover {
+      background: #282828;
+      transform: translateX(5px);
+    }
+
+    .add-btn {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 12px;
+      background: #1DB954;
+      color: black;
+      cursor: pointer;
+      font-weight: bold;
+
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .add-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(29,185,84,0.5);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+
+  <div class="sidebar">
+
+    <div class="logo">Sound Circle</div>
+
+    <div class="menu">
+      <a href="home.html">Home</a>
+      <a href="search.html">Search</a>
+      <a href="Library.html">Library</a>
+	  
+	   <!-- New Tabs -->
+  <a href="peers.html">Find Peers</a>
+   <a href="friends.html">Friends</a>
+   <a href="chats.html">Chats</a>
+   <a href="coplaylist.html" class="active">Co-laylist</a>
+   <a href="about.html">About Us</a>
+      
+    </div>
+
+  </div>
+
+  <!-- MAIN -->
+
+  <div class="main">
+
+    <div class="hero">
+
+      <h1>CoPlaylist</h1>
+
+      <p>
+        Build playlists together with your friends.
+        Share songs, moods, and music moments in one place.
+      </p>
+
+    </div>
+
+    <!-- PLAYLISTS -->
+
+    <div class="playlist-section">
+
+      <h2>Shared Playlists</h2>
+
+      <div class="playlist-grid">
+
+        <div class="playlist-card">
+
+          <div class="playlist-cover"></div>
+
+          <div class="playlist-info">
+            <h3>3AM Overthinking</h3>
+
+            <p>
+              Sad late night songs for silent moments.
+            </p>
+
+            <div class="playlist-meta">
+              <span>By Alex & You</span>
+              <span>42 songs</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="playlist-card">
+
+          <div class="playlist-cover"></div>
+
+          <div class="playlist-info">
+            <h3>Ghetto Nights</h3>
+
+            <p>
+              Drill, rap, and underground street vibes.
+            </p>
+
+            <div class="playlist-meta">
+              <span>By John & You</span>
+              <span>65 songs</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="playlist-card">
+
+          <div class="playlist-cover"></div>
+
+          <div class="playlist-info">
+            <h3>Midnight Jazz</h3>
+
+            <p>
+              Calm jazz tunes and relaxing instrumentals.
+            </p>
+
+            <div class="playlist-meta">
+              <span>By Mika & You</span>
+              <span>30 songs</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="playlist-card">
+
+          <div class="playlist-cover"></div>
+
+          <div class="playlist-info">
+            <h3>Hype Beast</h3>
+
+            <p>
+              Hiphop and workout music for gym sessions.
+            </p>
+
+            <div class="playlist-meta">
+              <span>By Sean & You</span>
+              <span>53 songs</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="playlist-card">
+
+          <div class="playlist-cover"></div>
+
+          <div class="playlist-info">
+            <h3>Broken Signals</h3>
+
+            <p>
+              Emotional songs for heartbreak and memories.
+            </p>
+
+            <div class="playlist-meta">
+              <span>By Luna & You</span>
+              <span>28 songs</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="playlist-card">
+
+          <div class="playlist-cover"></div>
+
+          <div class="playlist-info">
+            <h3>Late Drive</h3>
+
+            <p>
+              Night drive music with chill synth vibes.
+            </p>
+
+            <div class="playlist-meta">
+              <span>By Chris & You</span>
+              <span>39 songs</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SHARED SONGS -->
+
+    <div class="shared-box">
+
+      <h2>Shared Songs From Chats</h2>
+
+      <div id="sharedSongsContainer"></div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    // LOAD SHARED SONGS FROM CHAT
+
+    const sharedSongsContainer =
+      document.getElementById("sharedSongsContainer");
+
+    const coPlaylistSongs =
+      JSON.parse(localStorage.getItem("coPlaylist")) || [];
+
+    if (coPlaylistSongs.length === 0) {
+
+      sharedSongsContainer.innerHTML = `
+
+        <p style="color:#b3b3b3;">
+          No shared songs yet.
+        </p>
+
+      `;
+
+    } else {
+
+      coPlaylistSongs.forEach(song => {
+
+        const songDiv = document.createElement("div");
+
+        songDiv.classList.add("shared-song");
+
+        songDiv.innerHTML = `
+
+          <div>
+            🎵 ${song}
+          </div>
+
+          <button class="add-btn">
+            Added
+          </button>
+
+        `;
+
+        sharedSongsContainer.appendChild(songDiv);
+
+      });
+
+    }
+
+  </script>
+
+</body>
+</html>

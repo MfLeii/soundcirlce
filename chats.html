@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sound Circle - Chats</title>
+
+  <style>
+
+    :root{
+  --bg-dark:#0b0b0b;
+  --card-dark:#131313;
+  --card-light:#1b1b1b;
+
+  --primary:#1ed760;
+  --primary-dark:#16a34a;
+
+  --text:#ffffff;
+  --muted:#9f9f9f;
+
+  --green-gradient:linear-gradient(145deg,#1ed760,#16a34a);
+  --dark-gradient:linear-gradient(145deg,#1a1a1a,#0d0d0d);
+
+  --shadow:0 15px 40px rgba(0,0,0,0.45);
+  --glow:0 0 25px rgba(30,215,96,0.35);
+}
+
+/* GLOBAL */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Segoe UI',sans-serif;
+  background:radial-gradient(circle at top right,#1a1a1a,#0b0b0b 60%);
+  color:white;
+  overflow:hidden;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:230px;
+  height:100vh;
+  position:fixed;
+  left:0;
+  top:0;
+  padding:25px 18px;
+
+  background:linear-gradient(180deg,#050505,#0f0f0f);
+  border-right:1px solid rgba(255,255,255,0.05);
+}
+
+.logo{
+  color:var(--primary);
+  font-size:32px;
+  font-weight:700;
+  margin-bottom:40px;
+  text-shadow:0 0 15px rgba(30,215,96,0.4);
+}
+
+.menu{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.menu a{
+  text-decoration:none;
+  color:#9f9f9f;
+  padding:14px 16px;
+  border-radius:14px;
+  transition:.3s;
+}
+
+.menu a:hover{
+  background:#181818;
+  color:white;
+  transform:translateX(6px);
+}
+
+.menu a.active{
+  background:var(--green-gradient);
+  color:black;
+  font-weight:bold;
+  box-shadow:var(--glow);
+}
+
+/* LAYOUT */
+.chat-layout{
+  margin-left:230px;
+  height:100vh;
+  display:flex;
+}
+
+/* LEFT PANEL */
+.chat-sidebar{
+  width:340px;
+  background:rgba(20,20,20,0.95);
+  backdrop-filter:blur(12px);
+  border-right:1px solid rgba(255,255,255,0.05);
+}
+
+.chat-header{
+  padding:25px;
+  font-size:28px;
+  font-weight:700;
+
+  background:linear-gradient(90deg,white,#1ed760);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* SEARCH */
+.chat-search{
+  padding:15px;
+}
+
+.chat-search input{
+  width:100%;
+  padding:14px 18px;
+  border:none;
+  outline:none;
+
+  border-radius:30px;
+  background:#1b1b1b;
+
+  color:white;
+
+  border:1px solid rgba(255,255,255,0.05);
+  transition:.3s;
+}
+
+.chat-search input:focus{
+  border:1px solid rgba(30,215,96,0.4);
+  box-shadow:var(--glow);
+}
+
+/* FRIEND ITEM */
+.friend-chat{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:16px;
+  cursor:pointer;
+
+  transition:.3s;
+  position:relative;
+}
+
+.friend-chat::before{
+  content:'';
+  position:absolute;
+  left:0;
+  top:0;
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,rgba(30,215,96,0.15),transparent);
+  transition:.4s;
+}
+
+.friend-chat:hover::before{
+  width:100%;
+}
+
+.friend-chat:hover{
+  transform:translateX(6px);
+}
+
+.friend-chat.active{
+  background:#1a1a1a;
+}
+
+/* AVATAR */
+.avatar{
+  width:55px;
+  height:55px;
+  border-radius:50%;
+
+  background:var(--green-gradient);
+  color:black;
+
+  font-weight:bold;
+  font-size:20px;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  box-shadow:var(--glow);
+}
+
+/* INFO */
+.friend-info h3{
+  font-size:16px;
+  margin-bottom:5px;
+}
+
+.friend-info p{
+  font-size:13px;
+  color:#a0a0a0;
+}
+
+/* RIGHT PANEL */
+.chat-main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  background:linear-gradient(to bottom,#1a1a1a,#0f0f0f);
+}
+
+/* TOPBAR */
+.chat-topbar{
+  padding:18px 22px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+
+  border-bottom:1px solid rgba(255,255,255,0.05);
+
+  backdrop-filter:blur(10px);
+}
+
+/* MESSAGES */
+.chat-messages{
+  flex:1;
+  padding:25px;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+
+/* MESSAGE */
+.message{
+  max-width:70%;
+  padding:14px 18px;
+  border-radius:18px;
+  line-height:1.5;
+  animation:popIn .25s ease;
+}
+
+@keyframes popIn{
+  from{opacity:0; transform:scale(.95);}
+  to{opacity:1; transform:scale(1);}
+}
+
+.received{
+  background:#222;
+  align-self:flex-start;
+}
+
+.sent{
+  background:var(--green-gradient);
+  color:black;
+  align-self:flex-end;
+}
+
+/* MUSIC SHARE */
+.music-share{
+  background:#161616;
+  border:1px solid #1ed760;
+  border-radius:15px;
+  padding:12px;
+  margin-top:10px;
+}
+
+.music-share h4{
+  color:#1ed760;
+}
+
+.music-share button{
+  margin-top:10px;
+  padding:10px 14px;
+
+  border:none;
+  border-radius:10px;
+
+  background:var(--green-gradient);
+  color:black;
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.music-share button:hover{
+  transform:scale(1.05);
+  box-shadow:var(--glow);
+}
+
+/* INPUT */
+.chat-input-area{
+  padding:18px;
+  border-top:1px solid rgba(255,255,255,0.05);
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.chat-input{
+  flex:1;
+  padding:15px 18px;
+  border:none;
+  border-radius:30px;
+  background:#1b1b1b;
+  color:white;
+  outline:none;
+}
+
+/* BUTTONS */
+.send-btn,
+.share-btn{
+  padding:14px 16px;
+  border:none;
+  border-radius:50%;
+
+  background:var(--green-gradient);
+  color:black;
+
+  cursor:pointer;
+
+  transition:.25s;
+}
+
+.send-btn:hover,
+.share-btn:hover{
+  transform:scale(1.1);
+  box-shadow:var(--glow);
+}
+
+/* SCROLL */
+::-webkit-scrollbar{
+  width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#1ed760;
+  border-radius:20px;
+}
+
+::-webkit-scrollbar-track{
+  background:#111;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+
+  <div class="sidebar">
+
+    <div class="logo">Sound Circle</div>
+
+    <div class="menu">
+      <a href="home.html">Home</a>
+      <a href="search.html">Search</a>
+      <a href="Library.html">Library</a>
+	  
+	   <!-- New Tabs -->
+  <a href="peers.html">Find Peers</a>
+   <a href="friends.html">Friends</a>
+    <a href="chats.html" class="active">Chats</a>
+   <a href="coplaylist.html">Co Playlists</a>
+   <a href="about.html">About Us</a>
+	  
+	  
+    </div>
+
+  </div>
+
+  <!-- CHAT LAYOUT -->
+
+  <div class="chat-layout">
+
+    <!-- LEFT -->
+
+    <div class="chat-sidebar">
+
+      <div class="chat-header">
+        Chats
+      </div>
+
+      <div class="chat-search">
+        <input type="text" placeholder="Search messages...">
+      </div>
+
+      <div class="friend-chat active">
+        <div class="avatar">A</div>
+
+        <div class="friend-info">
+          <h3>Alex</h3>
+          <p>Listening to Die With A Smile</p>
+        </div>
+      </div>
+
+      <div class="friend-chat">
+        <div class="avatar">M</div>
+
+        <div class="friend-info">
+          <h3>Mika</h3>
+          <p>Sent you a playlist</p>
+        </div>
+      </div>
+
+      <div class="friend-chat">
+        <div class="avatar">J</div>
+
+        <div class="friend-info">
+          <h3>John</h3>
+          <p>Currently online</p>
+        </div>
+      </div>
+	  
+	  <div class="friend-chat">
+  <div class="avatar">L</div>
+  <div class="friend-info">
+    <h3>Luna</h3>
+    <p>Sent a song</p>
+  </div>
+</div>
+
+<div class="friend-chat">
+  <div class="avatar">K</div>
+  <div class="friend-info">
+    <h3>Kai</h3>
+    <p>Listening now</p>
+  </div>
+</div>
+
+<div class="friend-chat">
+  <div class="avatar">S</div>
+  <div class="friend-info">
+    <h3>Sophia</h3>
+    <p>Shared a playlist</p>
+  </div>
+</div>
+
+<div class="friend-chat">
+  <div class="avatar">D</div>
+  <div class="friend-info">
+    <h3>Daniel</h3>
+    <p>Sent a message</p>
+  </div>
+</div>
+
+    </div>
+
+    <!-- RIGHT -->
+
+    <div class="chat-main">
+
+      <div class="chat-topbar">
+
+        <div class="avatar">A</div>
+
+        <div>
+          <h3>Alex</h3>
+          <p style="color:#b3b3b3;font-size:13px;">
+            Active now
+          </p>
+        </div>
+
+      </div>
+
+      <!-- MESSAGES -->
+
+      <div class="chat-messages" id="chatMessages">
+
+        <div class="message received">
+          Yo, check this song 🔥
+
+          <div class="music-share">
+            <h4>Die With A Smile</h4>
+            <p>Lady Gaga & Bruno Mars</p>
+
+            <button onclick="addToCoPlaylist('Die With A Smile')">
+              Add to CoPlaylist
+            </button>
+          </div>
+
+        </div>
+
+        <div class="message sent">
+          This is fire 🔥
+        </div>
+
+      </div>
+
+      <!-- INPUT -->
+
+      <div class="chat-input-area">
+
+        <button class="share-btn" id="shareMusicBtn">
+          🎵
+        </button>
+
+        <input
+          type="text"
+          class="chat-input"
+          id="chatInput"
+          placeholder="Message..."
+        >
+
+        <button class="send-btn" id="sendBtn">
+          ➤
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+const sendBtn = document.getElementById("sendBtn");
+const chatInput = document.getElementById("chatInput");
+const chatMessages = document.getElementById("chatMessages");
+
+
+// 🤖 SMART FAKE AI
+function getAIResponse(userMessage) {
+  const msg = userMessage.toLowerCase();
+
+  if (msg.includes("hi") || msg.includes("hello")) {
+    return "Hey! 👋 warrup bro, what music are you into right now?";
+  }
+
+  if (msg.includes("sad")) {
+    return "Aww 😔 try mellow songs... do you want recommendation?";
+  }
+
+  if (msg.includes("happy") || msg.includes("good mood")) {
+    return "Nice 🔥 upbeat playlist tayo! EDM or pop?";
+  }
+
+  if (msg.includes("recommend") || msg.includes("song")) {
+    return `
+      Try this 🔥
+      <div class="music-share">
+        <h4>Golden Hour</h4>
+        <p>JVKE</p>
+        <button onclick="addToCoPlaylist('Golden Hour')">
+          Add to CoPlaylist
+        </button>
+      </div>
+    `;
+  }
+
+  if (msg.includes("love")) {
+    return "Love songs? 💖 Bruno Mars vibes or Cup of Joe!";
+  }
+
+  const fallback = [
+    "Hmm interesting 👀 tell me more...",
+    "Anong genre trip mo ngayon?",
+    "Do you want a song recommendation?",
+    "ooh that's nice 😎",
+    "are you down for some new music?"
+  ];
+
+  return fallback[Math.floor(Math.random() * fallback.length)];
+}
+
+
+// 🔥 SEND MESSAGE + AI
+sendBtn.addEventListener("click", function() {
+
+  const message = chatInput.value.trim();
+  if (message === "") return;
+
+  // USER MESSAGE
+  const messageDiv = document.createElement("div");
+  messageDiv.classList.add("message", "sent");
+  messageDiv.innerText = message;
+
+  chatMessages.appendChild(messageDiv);
+
+  chatInput.value = "";
+
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  // ✨ TYPING EFFECT
+  const typingDiv = document.createElement("div");
+  typingDiv.classList.add("message", "received");
+  typingDiv.innerText = "Typing...";
+  chatMessages.appendChild(typingDiv);
+
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  let dots = 0;
+  const interval = setInterval(() => {
+    dots = (dots + 1) % 4;
+    typingDiv.innerText = "Typing" + ".".repeat(dots);
+  }, 400);
+
+  // 🤖 AI RESPONSE
+  setTimeout(() => {
+    clearInterval(interval);
+    typingDiv.innerHTML = getAIResponse(message);
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }, 1200);
+
+});
+
+
+// 🎵 SHARE MUSIC
+document.getElementById("shareMusicBtn")
+  .addEventListener("click", function() {
+
+  const song = prompt("Enter music title to share:");
+  if (!song) return;
+
+  const shareDiv = document.createElement("div");
+  shareDiv.classList.add("message", "sent");
+
+  shareDiv.innerHTML = `
+    🎵 Shared a song
+    <div class="music-share">
+      <h4>${song}</h4>
+      <p>Shared through Sound Circle</p>
+      <button onclick="addToCoPlaylist('${song}')">
+        Add to CoPlaylist
+      </button>
+    </div>
+  `;
+
+  chatMessages.appendChild(shareDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+});
+
+
+// 🎧 CO PLAYLIST
+function addToCoPlaylist(song) {
+
+  let coPlaylist =
+    JSON.parse(localStorage.getItem("coPlaylist")) || [];
+
+  coPlaylist.push(song);
+
+  localStorage.setItem(
+    "coPlaylist",
+    JSON.stringify(coPlaylist)
+  );
+
+  alert(song + " added to CoPlaylist!");
+}
+
+
+// 💬 DIFFERENT CONVERSATIONS
+const conversations = {
+
+"Luna": [
+  { type: "received", text: "Try mo 'to, solid vibes 😌" },
+  {
+    type: "received",
+    text: `
+      <div class="music-share">
+        <h4>Multo</h4>
+        <p>Cup of Joe</p>
+        <button onclick="addToCoPlaylist('Multo')">
+          Add to CoPlaylist
+        </button>
+      </div>
+    `
+  }
+],
+
+"Kai": [
+  { type: "received", text: "EDM night tayo 🔥" },
+  { type: "sent", text: "Game!!" }
+],
+
+"Sophia": [
+  { type: "received", text: "I made this playlist for you 💖" },
+  {
+    type: "received",
+    text: `
+      <div class="music-share">
+        <h4>Golden Hour</h4>
+        <p>JVKE</p>
+        <button onclick="addToCoPlaylist('Golden Hour')">
+          Add to CoPlaylist
+        </button>
+      </div>
+    `
+  }
+],
+
+"Daniel": [
+  { type: "received", text: "Bro check mo tong bagong release" },
+  {
+    type: "received",
+    text: `
+      <div class="music-share">
+        <h4>Espresso</h4>
+        <p>Sabrina Carpenter</p>
+        <button onclick="addToCoPlaylist('Espresso')">
+          Add to CoPlaylist
+        </button>
+      </div>
+    `
+  }
+],
+
+"Alex": [
+  {
+    type: "received",
+    text: `
+      Yo, check this song 🔥
+      <div class="music-share">
+        <h4>Die With A Smile</h4>
+        <p>Lady Gaga & Bruno Mars</p>
+        <button onclick="addToCoPlaylist('Die With A Smile')">
+          Add to CoPlaylist
+        </button>
+      </div>
+    `
+  },
+  { type: "sent", text: "This is fire 🔥" }
+],
+
+"Mika": [
+  { type: "received", text: "I made a playlist for us 🎶" },
+  {
+    type: "received",
+    text: `
+      <div class="music-share">
+        <h4>Pasilyo</h4>
+        <p>SunKissed Lola</p>
+        <button onclick="addToCoPlaylist('Pasilyo')">
+          Add to CoPlaylist
+        </button>
+      </div>
+    `
+  }
+],
+
+"John": [
+  { type: "received", text: "Bro listen to this ASAP" },
+  { type: "sent", text: "What song?" },
+  {
+    type: "received",
+    text: `
+      <div class="music-share">
+        <h4>APT.</h4>
+        <p>ROSÉ & Bruno Mars</p>
+        <button onclick="addToCoPlaylist('APT.')">
+          Add to CoPlaylist
+        </button>
+      </div>
+    `
+  }
+]
+
+};
+
+
+// 👥 SWITCH CHAT
+const friendChats = document.querySelectorAll(".friend-chat");
+const topbarName = document.querySelector(".chat-topbar h3");
+const topbarStatus = document.querySelector(".chat-topbar p");
+
+friendChats.forEach(chat => {
+
+  chat.addEventListener("click", function() {
+
+    friendChats.forEach(c => c.classList.remove("active"));
+    this.classList.add("active");
+
+    const friendName = this.querySelector("h3").innerText;
+
+    topbarName.innerText = friendName;
+    topbarStatus.innerText = "Active now";
+
+    chatMessages.innerHTML = "";
+
+    const messages = conversations[friendName];
+
+    messages.forEach(msg => {
+
+      const msgDiv = document.createElement("div");
+      msgDiv.classList.add("message", msg.type);
+      msgDiv.innerHTML = msg.text;
+
+      chatMessages.appendChild(msgDiv);
+
+    });
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  });
+
+});
+
+</script>
+
+</body>
+</html>

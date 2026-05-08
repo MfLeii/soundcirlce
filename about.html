@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sound Circle – About Us</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    .card {
+      background: #181818;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      max-width: 800px;
+      text-align: center;
+    }
+    h1 {
+      color: #1DB954;
+      margin-bottom: 1.5rem;
+    }
+    h3 {
+      color: #1DB954;
+      margin-top: 1.5rem;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    ul li {
+      margin: 0.5rem 0;
+    }
+    .creators {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .creator {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      overflow: visible; /* allow tooltips outside */
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .creator img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .creator:hover {
+      transform: scale(1.1);
+    }
+    .creator span {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1DB954;
+      color: #000;
+      padding: 0.3rem 0.6rem;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    /* Name floats above */
+    .creator span.name {
+      bottom: 110%;
+    }
+    /* Role floats below */
+    .creator span.role {
+      top: 110%;
+    }
+    /* Hover effects */
+    .creator:hover span.name {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-10px);
+    }
+    .creator:hover span.role {
+      opacity: 1;
+      transform: translateX(-50%) translateY(10px);
+    }
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: #b3b3b3;
+      font-size: 0.9rem;
+    }
+    .back-home {
+      display: inline-block;
+      margin-top: 1rem;
+      background: #1DB954;
+      color: #000;
+      padding: 0.6rem 1.2rem;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .back-home:hover {
+      background: #1ed760;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>About Us – Sound Circle</h1>
+
+    <h3>🎯 Vision</h3>
+    <p>To create a world where every student feels seen, heard, and connected—through the music that defines them.</p>
+
+    <h3>🛠️ Mission</h3>
+    <p>We empower young people to build authentic friendships by transforming personal playlists into safe, meaningful social connections.</p>
+
+    <h3>🌟 Problem</h3>
+    <p>Many students feel isolated and struggle to connect, especially those too shy to approach others. Music offers comfort and identity, yet there’s no space that turns playlists into opportunities for genuine social interaction.</p>
+
+    <h3>💡 Solution</h3>
+    <p>Sound Circle connects students through shared playlists, turning music taste into friendship discovery. The app reduces isolation, fosters belonging, and builds authentic social connections through music-driven engagement.</p>
+
+    <h3>🚀 Go-To-Market Strategy</h3>
+    <p>Launch in Metro Manila universities, then expand to Cebu and Davao. Partner with campus orgs, student influencers, and event organizers to spread awareness.</p>
+
+    <h3>📊 Key Metrics</h3>
+    <ul>
+      <li>✔ Playlist match rate</li>
+      <li>✔ Daily active users</li>
+      <li>✔ Retention & engagement time</li>
+      <li>✔ Customer acquisition cost (CAC)</li>
+    </ul>
+
+    <h3>🔒 Positioning</h3>
+    <p>Sound Circle is not a dating app. It’s friendship-first, built around emotional safety, identity, and belonging — powered by the universal language of music.</p>
+
+    <h3>✨ Tagline</h3>
+    <p><em>Playlists become friendships.</em></p>
+
+    <!-- Creators Section -->
+    <div class="creators">
+      <div class="creator">
+        <img src="https://scontent.fmnl4-2.fna.fbcdn.net/v/t39.30808-6/474873157_703852505539352_1045155272946613555_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=53a332&_nc_ohc=tO0JVL5Mfi0Q7kNvwHXwF2X&_nc_oc=AdrS7SIFcxaxCy1Gij-VgdOOB6NEzTPU21YGbb0-eqdLThkidHS2Ty2Cst9NjpcqW4IIzXPXtJ06Efr-vRCHOU3W&_nc_zt=23&_nc_ht=scontent.fmnl4-2.fna&_nc_gid=tPSepihWcD3jiodASuPeIw&_nc_ss=7b2a8&oh=00_Af5EZcikHyhtLVpsk02LSz8kCTQCR6Oq5m8WMuJrVejpcQ&oe=6A02BA96" alt="Harley">
+        <span class="name">Harley David B. Abuzo</span>
+        <span class="role">Founder/Developer</span>
+      </div>
+      <div class="creator">
+        <img src="https://scontent.fmnl4-2.fna.fbcdn.net/v/t39.30808-6/490405887_3252867774864707_2717875393072787991_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=105&ccb=1-7&_nc_sid=53a332&_nc_ohc=ZO9F5DZmU30Q7kNvwFjPA3m&_nc_oc=Adpo8eDevaMpk3Y23sKHl9htJ3UQumUTwoxGCWI2cZ6zX5p-gpQrMtjx7LBz2hLZ9xDk1QvfrnPo9Mdg6TEMadAW&_nc_zt=23&_nc_ht=scontent.fmnl4-2.fna&_nc_gid=gxrDH7W5CF1uPb7si3zy8w&_nc_ss=7b2a8&oh=00_Af4w88Bcucsspv4DXAx_fVBksgJ1clDELaB-TH2rvZvWFQ&oe=6A02CFFD" alt="John Cristian L. Santos">
+        <span class="name">John Cristian L. Santos</span>
+        <span class="role">Designer</span>
+      </div>
+      <div class="creator">
+        <img src="https://scontent.fmnl4-2.fna.fbcdn.net/v/t39.30808-6/334961426_760457229116721_6391276193173501087_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=WzrNxGyllkAQ7kNvwFsoH4y&_nc_oc=AdoeROSoP4GzHAd6BP5AA9Qt8FlyN-lE64oOR8-O1joQvnfNrvgdBmUwWgPKc1f0f1ajE_WhLjdScZK0NGWSZMw-&_nc_zt=23&_nc_ht=scontent.fmnl4-2.fna&_nc_gid=yqxk2Ksh8xuJwKg9pui0Lw&_nc_ss=7b2a8&oh=00_Af6cnWnYaJ5OC8f2bXFZzVwzpVvBP9NpYkByoTb12jUQOQ&oe=6A02CBED" alt="Aaron Dwight Jalac">
+        <span class="name">Aaron Dwight Jalac</span>
+        <span class="role">Documentation</span>
+      </div>
+    </div>
+
+    <footer>
+      <p>© 2026 Sound Circle | Built for students, powered by connection</p>
+      <a href="home.html" class="back-home">Back to Home</a>
+    </footer>
+  </div>
+</body>
+</html>

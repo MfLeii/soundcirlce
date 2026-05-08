@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sound Circle – Login</title>
+
+  <style>
+
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* =========================
+       LOADING SCREEN
+    ========================== */
+
+    .loading-screen {
+      position: fixed;
+      inset: 0;
+      background: #121212;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      z-index: 9999;
+
+      animation: fadeOut 1s ease forwards;
+      animation-delay: 3s;
+    }
+
+    .loading-title {
+      font-size: 52px;
+      color: #1DB954;
+      font-weight: bold;
+      margin-bottom: 35px;
+      letter-spacing: 2px;
+    }
+
+    .wave {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 70px;
+    }
+
+    .bar {
+      width: 8px;
+      height: 20px;
+      background: #1DB954;
+      border-radius: 10px;
+
+      animation: soundWave 1s infinite ease-in-out;
+    }
+
+    .bar:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .bar:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    .bar:nth-child(4) {
+      animation-delay: 0.3s;
+    }
+
+    .bar:nth-child(5) {
+      animation-delay: 0.4s;
+    }
+
+    .bar:nth-child(6) {
+      animation-delay: 0.5s;
+    }
+
+    .bar:nth-child(7) {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes soundWave {
+
+      0%,
+      100% {
+        height: 20px;
+        opacity: 0.5;
+      }
+
+      50% {
+        height: 70px;
+        opacity: 1;
+      }
+
+    }
+
+    @keyframes fadeOut {
+
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+    }
+
+    /* =========================
+       LOGIN UI
+    ========================== */
+
+    .main-content {
+      width: 100%;
+      height: 100vh;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      opacity: 0;
+
+      animation: showLogin 1s ease forwards;
+      animation-delay: 3s;
+    }
+
+    @keyframes showLogin {
+
+      to {
+        opacity: 1;
+      }
+
+    }
+
+    .login-container {
+      background: #181818;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      width: 320px;
+      text-align: center;
+
+      transform: translateY(20px);
+
+      animation: slideUp 1s ease forwards;
+      animation-delay: 3s;
+    }
+
+    @keyframes slideUp {
+
+      to {
+        transform: translateY(0);
+      }
+
+    }
+
+    h1 {
+      color: #1DB954;
+      margin-bottom: 1.5rem;
+      font-size: 34px;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.9rem;
+      margin: 0.5rem 0;
+      border: none;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      background: #282828;
+      color: #fff;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      box-shadow: 0 0 10px rgba(29,185,84,0.4);
+    }
+
+    input[type="submit"] {
+      background: #1DB954;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+
+      transition:
+        transform 0.2s ease,
+        background 0.25s ease;
+    }
+
+    input[type="submit"]:hover {
+      background: #1ed760;
+      transform: scale(1.03);
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      margin: 0.5rem 0;
+      font-size: 0.9rem;
+      color: #b3b3b3;
+    }
+
+    .remember input {
+      margin-right: 0.5rem;
+      width: auto;
+    }
+
+    .footer {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #b3b3b3;
+    }
+
+    a {
+      color: #1DB954;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- LOADING SCREEN -->
+
+  <div class="loading-screen">
+
+    <div class="loading-title">
+      Sound Circle
+    </div>
+
+    <div class="wave">
+
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+
+    </div>
+
+  </div>
+
+  <!-- LOGIN -->
+
+  <div class="main-content">
+
+    <div class="login-container">
+
+      <h1>Sound Circle</h1>
+
+      <form onsubmit="return loginUser()">
+
+        <input
+          type="text"
+          id="username"
+          placeholder="Username"
+          required
+        >
+
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          required
+        >
+
+        <div class="remember">
+
+          <input type="checkbox" id="rememberMe">
+
+          <label for="rememberMe">
+            Remember Me
+          </label>
+
+        </div>
+
+        <input type="submit" value="Login">
+
+      </form>
+
+      <div class="footer">
+        Don’t have an account?
+        <a href="signup.html">
+          Sign up
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    // Load remembered username
+    window.onload = function() {
+
+      const savedUser =
+        localStorage.getItem("savedUsername");
+
+      if (savedUser) {
+
+        document.getElementById("username").value =
+          savedUser;
+
+        document.getElementById("rememberMe").checked =
+          true;
+
+      }
+
+    };
+
+    function loginUser() {
+
+      const user =
+        document.getElementById("username")
+        .value.trim();
+
+      const pass =
+        document.getElementById("password")
+        .value;
+
+      const remember =
+        document.getElementById("rememberMe")
+        .checked;
+
+      // Get account
+      const accountData =
+        localStorage.getItem("account_" + user);
+
+      if (!accountData) {
+
+        alert(
+          "Account not found. Please sign up first."
+        );
+
+        return false;
+
+      }
+
+      const account =
+        JSON.parse(accountData);
+
+      if (account.password === pass) {
+
+        // Create profile
+        const profileKey =
+          "profile_" + user;
+
+        if (!localStorage.getItem(profileKey)) {
+
+          const defaultProfile = {
+
+            username: user,
+            avatar: "default.png",
+            createdAt: new Date().toISOString()
+
+          };
+
+          localStorage.setItem(
+            profileKey,
+            JSON.stringify(defaultProfile)
+          );
+
+        }
+
+        // Remember me
+        if (remember) {
+
+          localStorage.setItem(
+            "savedUsername",
+            user
+          );
+
+        } else {
+
+          localStorage.removeItem(
+            "savedUsername"
+          );
+
+        }
+
+        alert("Login successful!");
+
+        window.location.href = "home.html";
+
+      } else {
+
+        alert(
+          "Invalid password. Try again."
+        );
+
+      }
+
+      return false;
+
+    }
+
+  </script>
+
+</body>
+</html>

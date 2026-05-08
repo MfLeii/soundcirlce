@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sound Circle - Friends</title>
+
+  <style>
+    :root{
+  --bg-dark:#0b0b0b;
+  --card-dark:#131313;
+  --card-light:#1b1b1b;
+
+  --primary:#1ed760;
+  --primary-dark:#16a34a;
+
+  --text:#ffffff;
+  --muted:#9f9f9f;
+
+  --green-gradient:linear-gradient(145deg,#1ed760,#16a34a);
+  --dark-gradient:linear-gradient(145deg,#1a1a1a,#0d0d0d);
+
+  --shadow:0 15px 40px rgba(0,0,0,0.45);
+  --glow:0 0 25px rgba(30,215,96,0.35);
+}
+
+/* GLOBAL */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Segoe UI',sans-serif;
+  background:radial-gradient(circle at top right,#1a1a1a,#0b0b0b 60%);
+  color:white;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:230px;
+  height:100vh;
+  position:fixed;
+  left:0;
+  top:0;
+
+  background:linear-gradient(180deg,#050505,#0f0f0f);
+  border-right:1px solid rgba(255,255,255,0.05);
+
+  padding:25px 18px;
+}
+
+.logo{
+  color:var(--primary);
+  font-size:32px;
+  font-weight:700;
+  margin-bottom:40px;
+  text-shadow:0 0 15px rgba(30,215,96,0.4);
+}
+
+.menu{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.menu a{
+  text-decoration:none;
+  color:#9f9f9f;
+  padding:14px 16px;
+  border-radius:14px;
+  transition:.3s;
+}
+
+.menu a:hover{
+  background:#181818;
+  color:white;
+  transform:translateX(6px);
+}
+
+.menu a.active{
+  background:var(--green-gradient);
+  color:black;
+  font-weight:bold;
+  box-shadow:var(--glow);
+}
+
+/* MAIN */
+.main{
+  margin-left:230px;
+  padding:35px;
+  animation:fadeIn .6s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(15px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* TOPBAR */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:30px;
+}
+
+.title{
+  font-size:42px;
+  font-weight:700;
+
+  background:linear-gradient(90deg,white,#1ed760);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* SEARCH */
+.search-box{
+  width:320px;
+  padding:16px 20px;
+
+  border:none;
+  outline:none;
+
+  border-radius:40px;
+  background:rgba(25,25,25,0.9);
+
+  color:white;
+  font-size:15px;
+
+  border:1px solid rgba(255,255,255,0.05);
+  backdrop-filter:blur(10px);
+
+  transition:all .3s ease;
+}
+
+.search-box:focus{
+  transform:scale(1.02);
+  border:1px solid rgba(30,215,96,0.4);
+  box-shadow:var(--glow);
+}
+
+/* GRID */
+.friends-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:24px;
+}
+
+/* CARD */
+.friend-card{
+  background:var(--dark-gradient);
+  border-radius:22px;
+  padding:22px;
+
+  position:relative;
+  overflow:hidden;
+
+  transition:all .35s ease;
+}
+
+.friend-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);
+  opacity:0;
+  transition:.3s;
+}
+
+.friend-card:hover::before{
+  opacity:1;
+}
+
+.friend-card:hover{
+  transform:translateY(-10px) scale(1.02);
+  box-shadow:var(--shadow);
+}
+
+/* TOP */
+.friend-top{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  margin-bottom:15px;
+}
+
+/* AVATAR */
+.avatar{
+  width:65px;
+  height:65px;
+  border-radius:50%;
+
+  background:var(--green-gradient);
+  color:black;
+
+  font-size:24px;
+  font-weight:bold;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  box-shadow:var(--glow);
+}
+
+/* INFO */
+.friend-info h3{
+  margin-bottom:5px;
+  font-size:20px;
+}
+
+.friend-info p{
+  color:#a0a0a0;
+  font-size:14px;
+}
+
+/* STATUS */
+.status{
+  margin-top:10px;
+  background:#161616;
+  border-radius:14px;
+  padding:14px;
+  font-size:14px;
+}
+
+.status span{
+  color:#1ed760;
+  font-weight:bold;
+}
+
+/* ACTIONS */
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+
+.actions button{
+  flex:1;
+  min-width:90px;
+  padding:10px;
+
+  border:none;
+  border-radius:12px;
+
+  cursor:pointer;
+  font-weight:bold;
+
+  transition:.25s;
+}
+
+.actions button:hover{
+  transform:scale(1.05);
+}
+
+/* BUTTONS */
+.unfriend{
+  background:var(--green-gradient);
+  color:black;
+}
+
+.unfollow{
+  background:#2a2a2a;
+  color:white;
+}
+
+.block{
+  background:#c62828;
+  color:white;
+}
+
+/* EMPTY */
+.empty-message{
+  margin-top:30px;
+  text-align:center;
+  color:#b3b3b3;
+  font-size:18px;
+}
+
+/* SCROLL */
+::-webkit-scrollbar{
+  width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#1ed760;
+  border-radius:20px;
+}
+
+::-webkit-scrollbar-track{
+  background:#111;
+}
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+
+    <div class="logo">Sound Circle</div>
+
+    <div class="menu">
+      <a href="home.html">Home</a>
+      <a href="search.html">Search</a>
+      <a href="Library.html">Library</a>
+	  
+	   <!-- New Tabs -->
+  <a href="peers.html">Find Peers</a>
+   <a href="friends.html" class="active">Friends</a>
+   <a href="chats.html">Chats</a>
+   <a href="coplaylist.html">Co Playlists</a>
+   <a href="about.html">About Us</a>
+	  
+    </div>
+
+  </div>
+
+  <div class="main">
+
+    <div class="topbar">
+      <div class="title">Friends</div>
+
+      <input
+        type="text"
+        class="search-box"
+        id="friendSearch"
+        placeholder="Search friends..."
+      >
+    </div>
+
+    <div class="friends-grid" id="friendsGrid"></div>
+
+    <div class="empty-message" id="emptyMessage">
+      No friends found.
+    </div>
+
+  </div>
+
+  <script>
+
+    const genres = [
+      "Pop",
+      "Hip Hop",
+      "Rock",
+      "OPM",
+      "Jazz",
+      "Lo-fi",
+      "R&B",
+      "K-Pop",
+      "EDM",
+      "Alternative"
+    ];
+
+    const songs = [
+      "Die With A Smile",
+      "APT.",
+      "Birds of a Feather",
+      "Pasilyo",
+      "Multo",
+      "Sining",
+      "Espresso",
+      "Nonsense",
+      "Golden Hour",
+      "Saturn"
+    ];
+
+    const artists = [
+      "Bruno Mars",
+      "Billie Eilish",
+      "Cup of Joe",
+      "Dionela",
+      "Taylor Swift",
+      "Sabrina Carpenter",
+      "ROSÉ",
+      "Lola Amour",
+      "Hev Abi",
+      "Olivia Rodrigo"
+    ];
+
+    const friendNames = [
+      "Alex","Mika","John","Harvey","Sean","Luna","Sophia","Daniel","Chris","Nathan",
+      "Jasmine","Kurt","Jessa","Gab","Liam","Noah","Ava","Ethan","Mason","Lucas",
+      "Jacob","Emma","Mia","Charlotte","Amelia","Harper","Evelyn","Abigail","Ella","Scarlett",
+      "Aria","Layla","Zoe","Hannah","Levi","Wyatt","Jack","Julian","Leo","Ezra",
+      "Aiden","Asher","Caleb","Eli","Kai","Miles","Theo","Finn","Zayn","Hunter"
+    ];
+
+    const friendsGrid = document.getElementById("friendsGrid");
+
+    const friends = [];
+
+    // Generate 50 demo friends
+    for (let i = 0; i < 50; i++) {
+
+      friends.push({
+        id: i,
+        name: friendNames[i],
+        genre: genres[Math.floor(Math.random() * genres.length)],
+        song: songs[Math.floor(Math.random() * songs.length)],
+        artist: artists[Math.floor(Math.random() * artists.length)]
+      });
+
+    }
+
+    function renderFriends(list) {
+
+      friendsGrid.innerHTML = "";
+
+      if (list.length === 0) {
+        document.getElementById("emptyMessage").style.display = "block";
+        return;
+      }
+
+      document.getElementById("emptyMessage").style.display = "none";
+
+      list.forEach(friend => {
+
+        const card = document.createElement("div");
+        card.classList.add("friend-card");
+
+        card.innerHTML = `
+
+          <div class="friend-top">
+
+            <div class="avatar">
+              ${friend.name.charAt(0)}
+            </div>
+
+            <div class="friend-info">
+              <h3>${friend.name}</h3>
+              <p>Favorite Genre: ${friend.genre}</p>
+              <p>Online now</p>
+            </div>
+
+          </div>
+
+          <div class="status">
+            🎧 Currently listening to:
+            <br>
+            <span>${friend.song}</span>
+            by ${friend.artist}
+          </div>
+
+          <div class="actions">
+
+            <button class="unfriend">
+              Unfriend
+            </button>
+
+            <button class="unfollow">
+              Unfollow
+            </button>
+
+            <button class="block">
+              Block
+            </button>
+
+          </div>
+
+        `;
+
+        // Unfriend
+        card.querySelector(".unfriend")
+          .addEventListener("click", function() {
+
+          card.style.opacity = "0";
+          card.style.transform = "scale(0.9)";
+
+          setTimeout(() => {
+            card.remove();
+          }, 250);
+
+        });
+
+        // Unfollow
+        card.querySelector(".unfollow")
+          .addEventListener("click", function() {
+
+          this.innerText = "Unfollowed";
+          this.style.background = "#666";
+
+        });
+
+        // Block
+        card.querySelector(".block")
+          .addEventListener("click", function() {
+
+          const confirmBlock =
+            confirm("Block " + friend.name + "?");
+
+          if (confirmBlock) {
+
+            card.style.opacity = "0";
+            card.style.transform = "translateX(-50px)";
+
+            setTimeout(() => {
+              card.remove();
+            }, 300);
+
+          }
+
+        });
+
+        friendsGrid.appendChild(card);
+
+      });
+
+    }
+
+    renderFriends(friends);
+
+    // Search functionality
+    document.getElementById("friendSearch")
+      .addEventListener("input", function() {
+
+      const query = this.value.toLowerCase();
+
+      const filtered = friends.filter(friend =>
+        friend.name.toLowerCase().includes(query) ||
+        friend.genre.toLowerCase().includes(query) ||
+        friend.song.toLowerCase().includes(query)
+      );
+
+      renderFriends(filtered);
+
+    });
+
+  </script>
+
+</body>
+</html>

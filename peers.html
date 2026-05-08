@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sound Circle - Peers</title>
+
+<style>
+:root{
+  --primary:#1ed760;
+  --bg-dark:#0b0b0b;
+  --dark:#131313;
+  --light:#1b1b1b;
+  --text:#fff;
+  --muted:#9f9f9f;
+  --green-gradient:linear-gradient(145deg,#1ed760,#16a34a);
+  --shadow:0 15px 40px rgba(0,0,0,0.45);
+  --glow:0 0 25px rgba(30,215,96,0.35);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Segoe UI',sans-serif;
+  background:radial-gradient(circle at top right,#1a1a1a,#0b0b0b 60%);
+  color:white;
+  overflow:hidden;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:230px;
+  height:100vh;
+  position:fixed;
+  left:0;
+  top:0;
+  padding:25px 18px;
+  background:linear-gradient(180deg,#050505,#0f0f0f);
+  border-right:1px solid rgba(255,255,255,0.05);
+}
+
+.logo{
+  color:var(--primary);
+  font-size:30px;
+  font-weight:700;
+  margin-bottom:40px;
+  text-shadow:0 0 15px rgba(30,215,96,0.4);
+}
+
+.menu{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.menu a{
+  padding:14px 16px;
+  border-radius:14px;
+  color:#9f9f9f;
+  text-decoration:none;
+  transition:.3s;
+  position:relative;
+  overflow:hidden;
+}
+
+.menu a:hover{
+  background:#181818;
+  color:white;
+  transform:translateX(6px);
+}
+
+.menu a.active{
+  background:var(--green-gradient);
+  color:black;
+  font-weight:bold;
+  box-shadow:var(--glow);
+}
+
+/* MAIN */
+.main{
+  margin-left:230px;
+  padding:35px;
+}
+
+.title{
+  font-size:40px;
+  font-weight:700;
+  margin-bottom:25px;
+  background:linear-gradient(90deg,white,#1ed760);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* RADAR */
+.radar{
+  width:520px;
+  height:520px;
+  margin:40px auto;
+  border-radius:50%;
+  position:relative;
+
+  background:radial-gradient(circle,#1a1a1a,#0a0a0a);
+  border:2px solid rgba(30,215,96,0.2);
+
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.radar::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:conic-gradient(from 0deg,transparent,rgba(30,215,96,0.25),transparent);
+  animation:spin 4s linear infinite;
+}
+
+@keyframes spin{
+  from{transform:rotate(0);}
+  to{transform:rotate(360deg);}
+}
+
+/* USER DOT */
+.user{
+  position:absolute;
+  width:14px;
+  height:14px;
+  background:#1ed760;
+  border-radius:50%;
+  cursor:pointer;
+
+  box-shadow:0 0 12px #1ed760;
+  transition:.2s;
+}
+
+.user:hover{
+  transform:scale(1.3);
+  box-shadow:0 0 20px #1ed760;
+}
+
+/* POPUP (IMPROVED) */
+.popup{
+  position:absolute;
+  background:rgba(20,20,20,0.95);
+  backdrop-filter:blur(10px);
+
+  padding:15px;
+  border-radius:16px;
+  width:200px;
+
+  border:1px solid rgba(255,255,255,0.05);
+  box-shadow:var(--shadow);
+
+  display:none;
+
+  transform:translate(-50%, -120%);
+  animation:fadeUp .25s ease;
+}
+
+@keyframes fadeUp{
+  from{opacity:0; transform:translate(-50%, -100%);}
+  to{opacity:1; transform:translate(-50%, -120%);}
+}
+
+.popup strong{
+  font-size:16px;
+}
+
+.popup button{
+  width:100%;
+  margin-top:8px;
+  padding:8px;
+
+  border:none;
+  border-radius:10px;
+
+  background:#1b1b1b;
+  color:white;
+
+  cursor:pointer;
+  transition:.2s;
+}
+
+.popup button:hover{
+  background:var(--green-gradient);
+  color:black;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">Sound Circle</div>
+
+  <div class="menu">
+    <a href="home.html">Home</a>
+    <a href="search.html">Search</a>
+    <a href="library.html">Library</a>
+      <a href="peers.html">Find Peers</a>
+      <a href="friends.html">Friends</a>
+	  <a href="chats.html">Chats</a>
+   <a href="coplaylist.html">Co Playlists</a>
+      <a href="about.html">About Us</a>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="title">🌐 Peers Radar</div>
+
+  <div class="radar" id="radar"></div>
+
+  <div class="popup" id="popup"></div>
+</div>
+
+<script>
+// fake users
+const users = [
+  { name: "Alex", x: 120, y: 180, distance: "0.8 km", genre: "OPM, Chill" },
+  { name: "Mia", x: 300, y: 100, distance: "1.2 km", genre: "Pop" },
+  { name: "Jin", x: 350, y: 300, distance: "2.5 km", genre: "Hip Hop" },
+  { name: "Luna", x: 200, y: 350, distance: "0.5 km", genre: "Rock" },
+  { name: "Kai", x: 80, y: 280, distance: "3.1 km", genre: "EDM" }
+];
+
+const radar = document.getElementById("radar");
+const popup = document.getElementById("popup");
+
+// create users on radar
+users.forEach(user => {
+  const dot = document.createElement("div");
+  dot.className = "user";
+  dot.style.left = user.x + "px";
+  dot.style.top = user.y + "px";
+
+  dot.addEventListener("click", (e) => {
+    popup.style.display = "block";
+    popup.style.left = user.x + "px";
+    popup.style.top = user.y + "px";
+
+    popup.innerHTML = `
+      <strong>${user.name}</strong><br>
+      📍 ${user.distance}<br>
+      🎵 ${user.genre}
+
+      <button onclick="addFriend('${user.name}')">➕ Add Friend</button>
+      <button onclick="chatUser('${user.name}')">💬 Chat</button>
+      <button onclick="coop('${user.name}')">🎧 Co-Playlist</button>
+    `;
+  });
+
+  radar.appendChild(dot);
+});
+
+// close popup
+document.addEventListener("click", (e) => {
+  if (!e.target.classList.contains("user")) {
+    popup.style.display = "none";
+  }
+});
+
+// actions (demo only)
+function addFriend(name) {
+  alert("Added " + name + " as friend!");
+}
+
+function chatUser(name) {
+  alert("Opening chat with " + name);
+}
+
+function coop(name) {
+  alert("Inviting " + name + " to co-playlist!");
+}
+</script>
+
+</body>
+</html>

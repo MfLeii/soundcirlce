@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sound Circle - Social Music App</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #121212;
+  color: white;
+}
+
+/* LAYOUT */
+.sidebar {
+  width: 200px;
+  height: 100vh;
+  background: black;
+  position: fixed;
+  padding: 20px;
+}
+
+.sidebar {
+      width: 220px;
+      height: 100vh;
+      background: #000;
+      position: fixed;
+      left: 0;
+      top: 0;
+      padding: 20px;
+    }
+
+    .logo {
+      color: #1DB954;
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 40px;
+    }
+
+    .menu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #b3b3b3;
+      text-decoration: none;
+      margin: 10px 0;
+      padding: 12px 15px;
+      font-size: 17px;
+      border-radius: 10px;
+
+      transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        transform 0.2s ease;
+    }
+
+    .menu a:hover {
+      background: #1f1f1f;
+      color: white;
+      transform: translateX(5px);
+    }
+
+    .menu a.active {
+      background: #1DB954;
+      color: black;
+      font-weight: bold;
+    }
+
+    .main {
+  margin-left: 220px;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+.main {
+  margin-left: 220px;
+  padding: 20px;
+}
+
+/* PROFILE */
+.cover {
+  width: 100%;
+  height: 260px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  overflow: hidden;
+}
+.cover::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.6));
+}
+
+.profile-pic {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 4px solid #1DB954;
+  object-fit: cover;
+  margin-top: -70px;
+  margin-left: 20px;
+  background: #333;
+  position: relative;
+  z-index: 2;
+}
+
+button {
+  background: #1DB954;
+  border: none;
+  padding: 8px 12px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+/* SECTIONS */
+.section {
+  background: #181818;
+  padding: 15px;
+  margin-top: 15px;
+  border-radius: 10px;
+}
+
+/* FEED */
+.post {
+  background: #222;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
+/* FRIEND LIST */
+.friend {
+  padding: 5px;
+  border-bottom: 1px solid #333;
+}
+.profile-header {
+  position: relative;
+  width: 100%;
+}
+
+.profile-info {
+  padding: 20px;
+  margin-left: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <div class="logo">Sound Circle</div>
+
+    <div class="menu">
+        <a href="home.html">Home</a>
+      <a href="search.html">Search</a>
+      <a href="Library.html">Library</a>
+	  
+	   <!-- New Tabs -->
+  <a href="peers.html">Find Peers</a>
+   <a href="friends.html">Friends</a>
+   <a href="chats.html">Chats</a>
+   <a href="coplaylist.html">Co Playlists</a>
+   <a href="about.html">About Us</a>
+    </div>
+  </div>
+
+<div class="main">
+
+ <div class="profile-header">
+  <div class="cover" id="cover"></div>
+
+  <img id="profilePic" class="profile-pic">
+
+  <div class="profile-info">
+
+  <h2 id="name">User</h2>
+  <p id="bio">Music lover 🎧</p>
+
+  <button onclick="editProfile()">Edit Profile</button>
+  <button onclick="uploadPic()">Upload Pic</button>
+  <button onclick="uploadCover()">Upload Cover</button>
+
+  <input type="file" id="picInput" hidden>
+  <input type="file" id="coverInput" hidden>
+
+  <!-- STATS -->
+  <div class="section">
+    <h3>📊 Stats</h3>
+    <p>Hours Played: <span id="hours">0</span></p>
+    <p>Top Genre: <span id="genre">None</span></p>
+  </div>
+
+  <!-- FRIENDS -->
+  <div class="section">
+    <h3>🧑 Friends</h3>
+    <div id="friends"></div>
+  </div>
+
+  <!-- RECENT -->
+  <div class="section">
+    <h3>🎵 Recently Played</h3>
+    <div id="recent"></div>
+  </div>
+
+  <!-- LIKED -->
+  <div class="section">
+    <h3>❤️ Liked Songs</h3>
+    <div id="liked"></div>
+  </div>
+
+  <!-- FEED -->
+  <div class="section">
+    <h3>🌐 Feed</h3>
+    <div id="feed"></div>
+  </div>
+
+</div>
+
+<script>
+
+/* DATABASE */
+let db = JSON.parse(localStorage.getItem("sc_db")) || {
+  profile: { name:"User", bio:"Music lover 🎧", pic:"", cover:"" },
+  friends: [],
+  liked: [],
+  recent: [],
+  stats: { hours:0, genre:{} },
+  feed: []
+};
+
+function save(){
+  localStorage.setItem("sc_db", JSON.stringify(db));
+}
+
+/* LOAD PROFILE */
+function load(){
+  document.getElementById("name").innerText = db.profile.name;
+  document.getElementById("bio").innerText = db.profile.bio;
+  document.getElementById("pic").src = db.profile.pic || "";
+  document.getElementById("cover").style.backgroundImage =
+    db.profile.cover ? `url(${db.profile.cover})` : "none";
+
+  document.getElementById("hours").innerText = db.stats.hours.toFixed(1);
+
+  let top = "None", max=0;
+  for(let g in db.stats.genre){
+    if(db.stats.genre[g] > max){
+      max = db.stats.genre[g];
+      top = g;
+    }
+  }
+  document.getElementById("genre").innerText = top;
+
+  render();
+}
+load();
+
+/* IMAGE UPLOAD */
+function uploadPic(){
+  document.getElementById("picInput").click();
+}
+
+function uploadCover(){
+  document.getElementById("coverInput").click();
+}
+
+document.getElementById("picInput").onchange = e=>{
+  let file = e.target.files[0];
+  let r = new FileReader();
+  r.onload = ev=>{
+    db.profile.pic = ev.target.result;
+    save(); load();
+  };
+  r.readAsDataURL(file);
+};
+
+document.getElementById("coverInput").onchange = e=>{
+  let file = e.target.files[0];
+  let r = new FileReader();
+  r.onload = ev=>{
+    db.profile.cover = ev.target.result;
+    save(); load();
+  };
+  r.readAsDataURL(file);
+};
+
+/* EDIT PROFILE */
+function editProfile(){
+  let n = prompt("Name:", db.profile.name);
+  let b = prompt("Bio:", db.profile.bio);
+
+  if(n) db.profile.name = n;
+  if(b) db.profile.bio = b;
+
+  save(); load();
+}
+
+/* SIMULATE SONG ACTION */
+function playSong(title, genre){
+  db.recent.unshift({title, genre});
+  db.stats.hours += 0.2;
+
+  db.stats.genre[genre] = (db.stats.genre[genre]||0)+1;
+
+  save(); load();
+}
+
+/* LIKE SONG */
+function likeSong(title){
+  if(!db.liked.includes(title)){
+    db.liked.push(title);
+  }
+  save(); load();
+}
+
+/* FRIEND ADD (simulated) */
+function addFriend(name){
+  if(!db.friends.includes(name)){
+    db.friends.push(name);
+    db.feed.unshift(`${name} became your friend`);
+  }
+  save(); load();
+}
+
+/* RENDER UI */
+function render(){
+
+  /* friends */
+  document.getElementById("friends").innerHTML =
+    db.friends.map(f=>`<div class="friend">${f}</div>`).join("") || "No friends";
+
+  /* recent */
+  document.getElementById("recent").innerHTML =
+    db.recent.map(r=>`<div>${r.title} (${r.genre})</div>`).join("") || "Empty";
+
+  /* liked */
+  document.getElementById("liked").innerHTML =
+    db.liked.map(l=>`<div>❤️ ${l}</div>`).join("") || "No likes";
+
+  /* feed */
+  document.getElementById("feed").innerHTML =
+    db.feed.map(f=>`<div class="post">${f}</div>`).join("") || "No activity";
+}
+
+</script>
+
+</body>
+</html>

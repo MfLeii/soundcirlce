@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sound Circle - Homepage</title>
+
+  <style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family: 'Segoe UI', sans-serif;
+  background:
+    radial-gradient(circle at top right,#1a1a1a,#0b0b0b 60%);
+  color:white;
+  overflow-x:hidden;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  width:230px;
+  height:100vh;
+  position:fixed;
+  left:0;
+  top:0;
+  background:
+    linear-gradient(
+      180deg,
+      #050505,
+      #0f0f0f
+    );
+
+  border-right:1px solid rgba(255,255,255,0.05);
+
+  padding:25px 18px;
+
+  display:flex;
+  flex-direction:column;
+
+  z-index:100;
+}
+
+.logo{
+  font-size:32px;
+  font-weight:700;
+  color:#1ed760;
+  margin-bottom:40px;
+
+  text-shadow:
+    0 0 12px rgba(30,215,96,0.5);
+}
+
+.menu{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.menu a{
+  text-decoration:none;
+  color:#9a9a9a;
+
+  padding:14px 16px;
+
+  border-radius:14px;
+
+  transition:
+    0.25s ease;
+
+  font-size:15px;
+  font-weight:500;
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+.menu a::before{
+  content:'';
+
+  position:absolute;
+  left:0;
+  top:0;
+
+  width:0%;
+  height:100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(30,215,96,0.2),
+      transparent
+    );
+
+  transition:0.3s ease;
+}
+
+.menu a:hover::before{
+  width:100%;
+}
+
+.menu a:hover{
+  background:#161616;
+  color:white;
+  transform:translateX(5px);
+}
+
+.menu a.active{
+  background:#1ed760;
+  color:black;
+  font-weight:700;
+}
+
+/* MAIN */
+
+.main{
+  margin-left:230px;
+  padding:30px;
+
+  min-height:100vh;
+
+  animation:fadeIn .5s ease;
+}
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* TOPBAR */
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:35px;
+
+  padding:25px;
+
+  border-radius:25px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(22,22,22,0.95),
+      rgba(10,10,10,0.9)
+    );
+
+  border:1px solid rgba(255,255,255,0.05);
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.45);
+}
+
+.welcome{
+  font-size:34px;
+  font-weight:700;
+
+  background:
+    linear-gradient(90deg,#fff,#1ed760);
+
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* PROFILE AREA */
+
+.profile-wrapper{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+/* NOTIFICATION */
+
+.notification-area{
+  position:relative;
+}
+
+.notification-btn{
+  width:48px;
+  height:48px;
+
+  border:none;
+  border-radius:50%;
+
+  background:#1c1c1c;
+  color:white;
+
+  font-size:18px;
+
+  cursor:pointer;
+
+  transition:0.25s ease;
+
+  box-shadow:
+    0 5px 15px rgba(0,0,0,0.4);
+}
+
+.notification-btn:hover{
+  transform:translateY(-3px) scale(1.05);
+
+  background:#252525;
+}
+
+.notification-count{
+  position:absolute;
+
+  top:-4px;
+  right:-2px;
+
+  width:20px;
+  height:20px;
+
+  border-radius:50%;
+
+  background:#1ed760;
+
+  color:black;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:11px;
+  font-weight:bold;
+}
+
+.notification-panel{
+  display:none;
+
+  position:absolute;
+
+  right:0;
+  top:60px;
+
+  width:320px;
+
+  background:#121212;
+
+  border-radius:18px;
+
+  overflow:hidden;
+
+  border:1px solid rgba(255,255,255,0.05);
+
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.5);
+
+  backdrop-filter:blur(10px);
+
+  z-index:999;
+}
+
+.notification-item{
+  padding:16px;
+
+  border-bottom:
+    1px solid rgba(255,255,255,0.05);
+
+  transition:0.25s ease;
+
+  cursor:pointer;
+}
+
+.notification-item:hover{
+  background:#1c1c1c;
+  transform:translateX(5px);
+}
+
+/* PROFILE */
+
+.profile-area{
+  position:relative;
+}
+
+.profile-btn{
+  width:50px;
+  height:50px;
+
+  border:none;
+  border-radius:50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #1ed760,
+      #16a34a
+    );
+
+  color:black;
+
+  font-size:18px;
+  font-weight:bold;
+
+  cursor:pointer;
+
+  transition:0.3s ease;
+
+  box-shadow:
+    0 0 20px rgba(30,215,96,0.35);
+}
+
+.profile-btn:hover{
+  transform:scale(1.08);
+}
+
+.dropdown{
+  display:none;
+
+  position:absolute;
+  right:0;
+  top:60px;
+
+  width:190px;
+
+  background:#151515;
+
+  border-radius:18px;
+
+  overflow:hidden;
+
+  border:1px solid rgba(255,255,255,0.05);
+
+  box-shadow:
+    0 15px 35px rgba(0,0,0,0.55);
+}
+
+.dropdown a{
+  display:block;
+
+  padding:14px 18px;
+
+  color:white;
+
+  text-decoration:none;
+
+  transition:0.25s ease;
+}
+
+.dropdown a:hover{
+  background:#222;
+  padding-left:24px;
+}
+
+/* SECTIONS */
+
+.section{
+  margin-top:30px;
+}
+
+.section h2{
+  margin-bottom:20px;
+
+  font-size:24px;
+
+  font-weight:700;
+}
+
+/* CARDS */
+
+.cards{
+  display:grid;
+
+  grid-template-columns:
+    repeat(auto-fill,minmax(230px,1fr));
+
+  gap:22px;
+}
+
+.card{
+  background:
+    linear-gradient(
+      145deg,
+      rgba(22,22,22,0.95),
+      rgba(10,10,10,0.95)
+    );
+
+  border-radius:22px;
+
+  padding:18px;
+
+  border:1px solid rgba(255,255,255,0.05);
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease,
+    border .3s ease;
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+.card::before{
+  content:'';
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(30,215,96,0.12),
+      transparent 40%
+    );
+
+  opacity:0;
+
+  transition:0.3s ease;
+}
+
+.card:hover::before{
+  opacity:1;
+}
+
+.card:hover{
+  transform:
+    translateY(-8px);
+
+  border:
+    1px solid rgba(30,215,96,0.25);
+
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.45);
+}
+
+.album{
+  width:100%;
+  height:180px;
+
+  border-radius:18px;
+
+  margin-bottom:15px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #242424,
+      #101010
+    );
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+.album::after{
+  content:'';
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(30,215,96,0.15),
+      transparent
+    );
+}
+
+.card h3{
+  margin-bottom:8px;
+  font-size:18px;
+}
+
+.card p{
+  color:#9f9f9f;
+  font-size:14px;
+}
+
+/* NEW USER */
+
+.new-user{
+  margin-top:25px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #1ed760,
+      #16a34a
+    );
+
+  color:black;
+
+  padding:20px;
+
+  border-radius:20px;
+
+  font-weight:700;
+
+  box-shadow:
+    0 10px 30px rgba(30,215,96,0.25);
+
+  animation:pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow{
+  0%{
+    box-shadow:
+      0 0 0 rgba(30,215,96,0.2);
+  }
+
+  50%{
+    box-shadow:
+      0 0 25px rgba(30,215,96,0.45);
+  }
+
+  100%{
+    box-shadow:
+      0 0 0 rgba(30,215,96,0.2);
+  }
+}
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar{
+  width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#1ed760;
+  border-radius:10px;
+}
+
+::-webkit-scrollbar-track{
+  background:#0d0d0d;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+  .sidebar{
+    width:90px;
+  }
+
+  .logo{
+    font-size:18px;
+  }
+
+  .menu a{
+    font-size:0;
+  }
+
+  .main{
+    margin-left:90px;
+  }
+
+  .welcome{
+    font-size:24px;
+  }
+
+}
+/* PLAYER */
+.player{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:85px;
+
+  background:rgba(15,15,15,0.95);
+  backdrop-filter:blur(12px);
+
+  border-top:1px solid rgba(255,255,255,0.05);
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:0 25px;
+  z-index:999;
+}
+
+/* LEFT */
+.player-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  width:25%;
+}
+
+.player-left img{
+  width:55px;
+  height:55px;
+  border-radius:12px;
+}
+
+.player-left h4{
+  font-size:14px;
+}
+
+.player-left p{
+  font-size:12px;
+  color:#9f9f9f;
+}
+
+/* CENTER */
+.player-center{
+  width:50%;
+  text-align:center;
+}
+
+.controls{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  margin-bottom:8px;
+}
+
+.controls button{
+  background:none;
+  border:none;
+  color:white;
+  font-size:18px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.controls button:hover{
+  transform:scale(1.2);
+  color:#1ed760;
+}
+
+.controls .play{
+  font-size:22px;
+  background:linear-gradient(145deg,#1ed760,#16a34a);
+  color:black;
+  padding:6px 12px;
+  border-radius:50%;
+}
+
+/* PROGRESS */
+.progress{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:12px;
+  color:#9f9f9f;
+}
+
+.bar{
+  flex:1;
+  height:5px;
+  background:#333;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.fill{
+  width:40%;
+  height:100%;
+  background:linear-gradient(90deg,#1ed760,#16a34a);
+}
+
+/* RIGHT */
+.player-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:25%;
+  justify-content:flex-end;
+}
+
+.volume{
+  width:100px;
+  height:5px;
+  background:#333;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.vol-fill{
+  width:60%;
+  height:100%;
+  background:#1ed760;
+}
+</style>>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="logo">Sound Circle</div>
+
+    <div class="menu">
+        <a href="home.html">Home</a>
+      <a href="search.html">Search</a>
+      <a href="Library.html">Library</a>
+	  
+	   <!-- New Tabs -->
+  <a href="peers.html">Find Peers</a>
+   <a href="friends.html">Friends</a>
+   <a href="chats.html">Chats</a>
+   <a href="coplaylist.html">Co Playlists</a>
+   <a href="about.html">About Us</a>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <div class="topbar">
+
+      <div class="welcome" id="welcomeText">
+        Welcome
+      </div>
+
+      <div class="profile-wrapper">
+
+  <!-- Notification -->
+  <div class="notification-area">
+
+    <button class="notification-btn" id="notificationButton">
+      🔔
+
+      <span class="notification-count">
+        3
+      </span>
+    </button>
+
+    <div class="notification-panel" id="notificationPanel">
+
+      <div class="notification-item">
+        ✅ Alex accepted your friend request
+      </div>
+
+      <div class="notification-item">
+        🎵 Mika accepted your co-playlist invite
+      </div>
+
+      <div class="notification-item">
+        ❤️ John liked your playlist
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Profile -->
+  <div class="profile-area">
+
+    <button class="profile-btn" id="profileButton">
+      U
+    </button>
+
+    <div class="dropdown" id="dropdownMenu">
+      <a href="profile.html">Profile</a>
+      <a href="settings.html">Settings</a>
+      <a href="#" id="logoutBtn">Logout</a>
+    </div>
+
+  </div>
+
+</div>
+    </div>
+
+    <div id="freshAccountMessage"></div>
+
+    <div class="section">
+      <h2>Made For You</h2>
+
+      <div class="cards">
+
+        <div class="card">
+          <div class="album"></div>
+          <h3>Daily Mix 1</h3>
+          <p>Your favorite tracks</p>
+        </div>
+
+        <div class="card">
+          <div class="album"></div>
+          <h3>Chill Hits</h3>
+          <p>Relax and enjoy</p>
+        </div>
+
+        <div class="card">
+          <div class="album"></div>
+          <h3>Top Songs</h3>
+          <p>Trending worldwide</p>
+        </div>
+
+        <div class="card">
+          <div class="album"></div>
+          <h3>Focus Music</h3>
+          <p>Study playlist</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+
+    // Get current logged in user
+    const currentUser = localStorage.getItem("savedUsername");
+
+    // If not logged in
+    if (!currentUser) {
+      window.location.href = "login.html";
+    }
+
+    // Load profile
+    const profileData = localStorage.getItem("profile_" + currentUser);
+
+    if (profileData) {
+
+      const profile = JSON.parse(profileData);
+
+      // Show username
+      document.getElementById("welcomeText").innerText =
+        "Welcome, " + profile.username;
+
+      // Profile icon letter
+      document.getElementById("profileButton").innerText =
+        profile.username.charAt(0).toUpperCase();
+
+      // First login condition
+      if (!profile.hasVisitedHomepage) {
+
+        document.getElementById("freshAccountMessage").innerHTML = `
+          <div class="new-user">
+            🎉 Welcome to Sound Circle, ${profile.username}!
+            Start exploring your music now.
+          </div>
+        `;
+
+        // Save that user already visited homepage
+        profile.hasVisitedHomepage = true;
+
+        localStorage.setItem(
+          "profile_" + currentUser,
+          JSON.stringify(profile)
+        );
+      }
+
+    }
+
+    // Dropdown toggle
+    const profileButton =
+      document.getElementById("profileButton");
+
+    const dropdownMenu =
+      document.getElementById("dropdownMenu");
+
+    profileButton.addEventListener("click", function(event) {
+
+      event.stopPropagation();
+
+      if (
+        dropdownMenu.style.display === "block"
+      ) {
+        dropdownMenu.style.display = "none";
+      } else {
+        dropdownMenu.style.display = "block";
+      }
+
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener("click", function() {
+      dropdownMenu.style.display = "none";
+    });
+
+    // Logout
+    document.getElementById("logoutBtn")
+      .addEventListener("click", function() {
+
+      localStorage.removeItem("savedUsername");
+
+      window.location.href = "login.html";
+    });
+	// Notification dropdown
+
+const notificationButton =
+  document.getElementById("notificationButton");
+
+const notificationPanel =
+  document.getElementById("notificationPanel");
+
+notificationButton.addEventListener("click", function(event) {
+
+  event.stopPropagation();
+
+  if (
+    notificationPanel.style.display === "block"
+  ) {
+
+    notificationPanel.style.display = "none";
+
+  } else {
+
+    notificationPanel.style.display = "block";
+
+  }
+
+});
+
+// Close notification panel outside click
+document.addEventListener("click", function() {
+
+  notificationPanel.style.display = "none";
+
+});
+
+  </script>
+
+<button class="play">▶</button>
+      <button>⏭</button>
+    </div>
+
+    <div class="progress">
+      <span>1:12</span>
+      <div class="bar">
+        <div class="fill"></div>
+      </div>
+      <span>3:45</span>
+    </div>
+  </div>
+
+  <div class="player-right">
+    🔊
+    <div class="volume">
+      <div class="vol-fill"></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

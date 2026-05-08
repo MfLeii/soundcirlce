@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sound Circle - Search</title>
+
+  <style>
+:root{
+
+  --bg-dark:#0b0b0b;
+  --card-dark:#131313;
+  --card-light:#1b1b1b;
+
+  --primary:#1ed760;
+  --primary-dark:#16a34a;
+
+  --text:#ffffff;
+  --muted:#9f9f9f;
+
+  --green-gradient:
+    linear-gradient(
+      145deg,
+      #1ed760,
+      #16a34a
+    );
+
+  --dark-gradient:
+    linear-gradient(
+      145deg,
+      #1a1a1a,
+      #0d0d0d
+    );
+
+  --shadow:
+    0 10px 35px rgba(0,0,0,0.45);
+
+  --green-glow:
+    0 0 25px rgba(30,215,96,0.35);
+}
+
+/* GLOBAL */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Segoe UI',sans-serif;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      #1a1a1a,
+      #0b0b0b 60%
+    );
+
+  color:white;
+
+  overflow-x:hidden;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+
+  width:230px;
+  height:100vh;
+
+  position:fixed;
+  left:0;
+  top:0;
+
+  background:
+    linear-gradient(
+      180deg,
+      #050505,
+      #0f0f0f
+    );
+
+  border-right:
+    1px solid rgba(255,255,255,0.05);
+
+  padding:25px 18px;
+
+  z-index:100;
+}
+
+.logo{
+  color:var(--primary);
+
+  font-size:32px;
+  font-weight:700;
+
+  margin-bottom:40px;
+
+  text-shadow:
+    0 0 15px rgba(30,215,96,0.45);
+}
+
+.menu{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.menu a{
+
+  text-decoration:none;
+
+  color:#9f9f9f;
+
+  padding:14px 16px;
+
+  border-radius:14px;
+
+  position:relative;
+
+  overflow:hidden;
+
+  transition:
+    background .3s ease,
+    color .3s ease,
+    transform .3s ease;
+}
+
+.menu a::before{
+
+  content:'';
+
+  position:absolute;
+
+  top:0;
+  left:-100%;
+
+  width:100%;
+  height:100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(30,215,96,0.18),
+      transparent
+    );
+
+  transition:.5s;
+}
+
+.menu a:hover::before{
+  left:100%;
+}
+
+.menu a:hover{
+  background:#181818;
+  color:white;
+  transform:translateX(6px);
+}
+
+.menu a.active{
+
+  background:var(--green-gradient);
+
+  color:black;
+
+  font-weight:bold;
+
+  box-shadow:var(--green-glow);
+}
+
+/* MAIN */
+
+.main{
+  margin-left:230px;
+  padding:35px;
+
+  animation:fadeIn .6s ease;
+}
+
+@keyframes fadeIn{
+
+  from{
+    opacity:0;
+    transform:translateY(15px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* TITLE */
+
+.title{
+
+  font-size:42px;
+  font-weight:700;
+
+  margin-bottom:25px;
+
+  background:
+    linear-gradient(
+      90deg,
+      white,
+      #1ed760
+    );
+
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* SEARCH */
+
+.search-container{
+  position:relative;
+  max-width:760px;
+  margin-bottom:45px;
+}
+
+.search-bar{
+
+  width:100%;
+
+  padding:20px 24px;
+
+  border:none;
+  outline:none;
+
+  border-radius:40px;
+
+  background:
+    rgba(25,25,25,0.92);
+
+  color:white;
+
+  font-size:17px;
+
+  border:
+    1px solid rgba(255,255,255,0.05);
+
+  backdrop-filter:blur(12px);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.35);
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease,
+    border .3s ease;
+}
+
+.search-bar:focus{
+
+  transform:scale(1.01);
+
+  border:
+    1px solid rgba(30,215,96,0.4);
+
+  box-shadow:
+    0 0 25px rgba(30,215,96,0.35);
+}
+
+.search-bar::placeholder{
+  color:#8f8f8f;
+}
+
+/* RESULTS */
+
+.results{
+
+  margin-top:18px;
+
+  background:
+    rgba(15,15,15,0.96);
+
+  border-radius:22px;
+
+  overflow:hidden;
+
+  display:none;
+
+  border:
+    1px solid rgba(255,255,255,0.05);
+
+  backdrop-filter:blur(14px);
+
+  box-shadow:
+    0 20px 45px rgba(0,0,0,0.45);
+
+  animation:slideDown .3s ease;
+}
+
+@keyframes slideDown{
+
+  from{
+    opacity:0;
+    transform:translateY(-10px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* SONG */
+
+.song{
+
+  display:flex;
+  align-items:center;
+
+  gap:16px;
+
+  padding:16px;
+
+  cursor:pointer;
+
+  position:relative;
+
+  transition:
+    background .3s ease,
+    transform .25s ease;
+}
+
+.song::before{
+
+  content:'';
+
+  position:absolute;
+
+  left:0;
+  top:0;
+
+  width:0%;
+  height:100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(30,215,96,0.12),
+      transparent
+    );
+
+  transition:.4s;
+}
+
+.song:hover::before{
+  width:100%;
+}
+
+.song:hover{
+  background:#181818;
+  transform:translateX(5px);
+}
+
+.song img{
+
+  width:68px;
+  height:68px;
+
+  border-radius:16px;
+
+  object-fit:cover;
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease;
+}
+
+.song:hover img{
+
+  transform:scale(1.05);
+
+  box-shadow:
+    0 0 20px rgba(30,215,96,0.3);
+}
+
+.song-info h3{
+  font-size:17px;
+  margin-bottom:5px;
+}
+
+.song-info p{
+  color:#a0a0a0;
+  font-size:14px;
+}
+
+/* BROWSE */
+
+.browse{
+  margin-top:40px;
+}
+
+.browse h2{
+
+  font-size:28px;
+  margin-bottom:22px;
+}
+
+/* GENRES */
+
+.genres{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(auto-fill,minmax(220px,1fr));
+
+  gap:22px;
+}
+
+.genre{
+
+  height:140px;
+
+  border-radius:24px;
+
+  padding:24px;
+
+  font-size:24px;
+  font-weight:700;
+
+  position:relative;
+
+  overflow:hidden;
+
+  cursor:pointer;
+
+  transition:
+    transform .35s ease,
+    box-shadow .35s ease;
+}
+
+.genre::before{
+
+  content:'';
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,0.15),
+      transparent
+    );
+
+  opacity:0;
+
+  transition:.3s;
+}
+
+.genre:hover::before{
+  opacity:1;
+}
+
+.genre:hover{
+
+  transform:
+    translateY(-10px)
+    scale(1.03);
+
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.45);
+}
+
+/* GRADIENT GENRES */
+
+.genre:nth-child(1){
+  background:
+    linear-gradient(
+      145deg,
+      #ff512f,
+      #dd2476
+    );
+}
+
+.genre:nth-child(2){
+  background:
+    linear-gradient(
+      145deg,
+      #396afc,
+      #2948ff
+    );
+}
+
+.genre:nth-child(3){
+  background:
+    linear-gradient(
+      145deg,
+      #8e2de2,
+      #4a00e0
+    );
+}
+
+.genre:nth-child(4){
+  background:
+    linear-gradient(
+      145deg,
+      #11998e,
+      #38ef7d
+    );
+}
+
+.genre:nth-child(5){
+  background:
+    linear-gradient(
+      145deg,
+      #f12711,
+      #f5af19
+    );
+}
+
+.genre:nth-child(6){
+  background:
+    linear-gradient(
+      145deg,
+      #4b4b4b,
+      #232323
+    );
+}
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar{
+  width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#1ed760;
+  border-radius:20px;
+}
+
+::-webkit-scrollbar-track{
+  background:#111;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+  .sidebar{
+    width:90px;
+  }
+
+  .logo{
+    font-size:18px;
+  }
+
+  .menu a{
+    font-size:0;
+  }
+
+  .main{
+    margin-left:90px;
+  }
+
+  .title{
+    font-size:30px;
+  }
+}
+</style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="logo">Sound Circle</div>
+
+    <div class="menu">
+      <a href="home.html">Home</a>
+      <a href="search.html" class="active">Search</a>
+      <a href="library.html">Library</a>
+      <a href="peers.html">Find Peers</a>
+      <a href="friends.html">Friends</a>
+	  <a href="chats.html">Chats</a>
+   <a href="coplaylist.html">Co Playlists</a>
+      <a href="about.html">About Us</a>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <div class="title">Search</div>
+
+    <div class="search-container">
+
+      <input
+        type="text"
+        id="searchInput"
+        class="search-bar"
+        placeholder="What do you want to listen to?"
+      >
+
+      <div class="results" id="results"></div>
+
+    </div>
+
+    <div class="browse">
+      <h2>Browse All</h2>
+
+      <div class="genres">
+        <div class="genre">Pop</div>
+        <div class="genre">Hip Hop</div>
+        <div class="genre">OPM</div>
+        <div class="genre">Chill</div>
+        <div class="genre">Rock</div>
+        <div class="genre">Workout</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+
+    // Example music data from YouTube
+    const songs = [
+      {
+        title: "Die With A Smile",
+        artist: "Lady Gaga & Bruno Mars",
+        image: "https://i.ytimg.com/vi/kPa7bsKwL-c/hqdefault.jpg",
+        link: "https://www.youtube.com/watch?v=kPa7bsKwL-c"
+      },
+      {
+        title: "APT.",
+        artist: "ROSÉ & Bruno Mars",
+        image: "https://i.ytimg.com/vi/ekr2nIex040/hqdefault.jpg",
+        link: "https://www.youtube.com/watch?v=ekr2nIex040"
+      },
+      {
+        title: "Birds of a Feather",
+        artist: "Billie Eilish",
+        image: "https://i.ytimg.com/vi/V9PVRfjEBTI/hqdefault.jpg",
+        link: "https://www.youtube.com/watch?v=V9PVRfjEBTI"
+      },
+      {
+        title: "Pasilyo",
+        artist: "SunKissed Lola",
+        image: "https://i.ytimg.com/vi/WjAMM1hQ7qY/hqdefault.jpg",
+        link: "https://www.youtube.com/watch?v=WjAMM1hQ7qY"
+      },
+      {
+        title: "Multo",
+        artist: "Cup of Joe",
+        image: "https://i.ytimg.com/vi/4adZ7AguVcw/hqdefault.jpg",
+        link: "https://www.youtube.com/watch?v=4adZ7AguVcw"
+      },
+      {
+        title: "Sining",
+        artist: "Dionela",
+        image: "https://i.ytimg.com/vi/zsHq3zT8K0Y/hqdefault.jpg",
+        link: "https://www.youtube.com/watch?v=zsHq3zT8K0Y"
+      }
+    ];
+
+    const searchInput = document.getElementById("searchInput");
+    const results = document.getElementById("results");
+
+    searchInput.addEventListener("input", function() {
+
+      const query = this.value.toLowerCase();
+
+      results.innerHTML = "";
+
+      if (query.length === 0) {
+        results.style.display = "none";
+        return;
+      }
+
+      const filteredSongs = songs.filter(song =>
+        song.title.toLowerCase().includes(query) ||
+        song.artist.toLowerCase().includes(query)
+      );
+
+      if (filteredSongs.length > 0) {
+
+        results.style.display = "block";
+
+        filteredSongs.forEach(song => {
+
+          const songDiv = document.createElement("div");
+          songDiv.classList.add("song");
+
+          songDiv.innerHTML = `
+            <img src="${song.image}">
+
+            <div class="song-info">
+              <h3>${song.title}</h3>
+              <p>${song.artist}</p>
+            </div>
+          `;
+
+          songDiv.addEventListener("click", function() {
+            window.open(song.link, "_blank");
+          });
+
+          results.appendChild(songDiv);
+
+        });
+
+      } else {
+
+        results.style.display = "block";
+
+        results.innerHTML = `
+          <div style="padding:20px;color:#b3b3b3;">
+            No results found.
+          </div>
+        `;
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>
